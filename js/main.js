@@ -1047,6 +1047,13 @@ window.addEventListener('DOMContentLoaded', function (){
 
 			var toggleDuration = 200; //ms
 
+			// console.log("trying to submit form. the $form node is");
+			// console.log($form);
+			// console.log("the form method is");
+			// console.log($form.attr('method'));
+			// console.log("the data is");
+			// console.log($form.serialize());
+
 			$.ajax({
 				type: $form.attr('method'),
 				url: $form.attr('action'),
