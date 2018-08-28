@@ -24,6 +24,65 @@
       	console.log("not sending to Google Analytics");
       }
     </script>
+    <script>
+      runAmplitudeAnalytics = function(){
+      	// amplitude analytics
+        (function(e,t){var n=e.amplitude||{_q:[],_iq:{}};var r=t.createElement("script")
+        ;r.type="text/javascript";r.async=true
+        ;r.src="https://cdn.amplitude.com/libs/amplitude-4.4.0-min.gz.js"
+        ;r.onload=function(){if(e.amplitude.runQueuedFunctions){
+        e.amplitude.runQueuedFunctions()}else{
+        console.log("[Amplitude] Error: could not load SDK")}}
+        ;var i=t.getElementsByTagName("script")[0];i.parentNode.insertBefore(r,i)
+        ;function s(e,t){e.prototype[t]=function(){
+        this._q.push([t].concat(Array.prototype.slice.call(arguments,0)));return this}}
+        var o=function(){this._q=[];return this}
+        ;var a=["add","append","clearAll","prepend","set","setOnce","unset"]
+        ;for(var u=0;u<a.length;u++){s(o,a[u])}n.Identify=o;var c=function(){this._q=[]
+        ;return this}
+        ;var l=["setProductId","setQuantity","setPrice","setRevenueType","setEventProperties"]
+        ;for(var p=0;p<l.length;p++){s(c,l[p])}n.Revenue=c
+        ;var d=["init","logEvent","logRevenue","setUserId","setUserProperties","setOptOut","setVersionName","setDomain","setDeviceId","setGlobalUserProperties","identify","clearUserProperties","setGroup","logRevenueV2","regenerateDeviceId","logEventWithTimestamp","logEventWithGroups","setSessionId","resetSessionId"]
+        ;function v(e){function t(t){e[t]=function(){
+        e._q.push([t].concat(Array.prototype.slice.call(arguments,0)))}}
+        for(var n=0;n<d.length;n++){t(d[n])}}v(n);n.getInstance=function(e){
+        e=(!e||e.length===0?"$default_instance":e).toLowerCase()
+        ;if(!n._iq.hasOwnProperty(e)){n._iq[e]={_q:[]};v(n._iq[e])}return n._iq[e]}
+        ;e.amplitude=n})(window,document);
+      
+        // amplitude.getInstance().init("050c1dd1ab99ee6e4c13a5a9d3e541ce"); // dev
+      	amplitude.getInstance().init("f63d76cdd53514cb4c6cab5ce90c1e71"); // live
+      
+      	window.logEvent = function(eventName){
+      		amplitude.getInstance().logEvent(eventName);
+      	}
+      	var timer = function() { // gotta wait for jQuery to be ready
+      		if(window.jQuery && $){
+      			$(function(){
+      				logEvent("document.ready");
+      				$("body").on("click","[data-event]",function(){
+      					var eventName = $(this).attr("data-event");
+      					// alert(eventName);
+      					logEvent(eventName);
+      				});
+      			})
+          } else {
+            window.setTimeout(timer, 100);
+          }
+        };
+        timer();
+      }
+      // end amplitude analytics
+      
+    </script>
+    <script>
+      if( document.location.hostname.search("ueblo.com") !== -1 ){
+      	runAmplitudeAnalytics()
+      }
+      else{
+      	console.log("not sending to Amplitude Analytics");
+      }
+    </script>
     <!--place your Google Maps API key here:-->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfh_GTuZk_GKM0YwY-RQ7OBs6sAMcBGUg" defer></script>
     <script src="js/main.js" defer></script>
@@ -232,12 +291,6 @@
         </div>
       </footer>
       <!-- == END OF FOOTER 01 ==-->
-      <!-- == START OF VIDEO POPUP ==-->
-      <div data-popup-name="video" class="popup popup--video js-popup">
-        <button title="close" class="popup__close_btn js-close-all-popups"></button>
-        <iframe src="https://www.youtube.com/embed/9ZfN87gSjvI" frameborder="0" allowfullscreen class="popup__video_frame"></iframe>
-      </div>
-      <!-- == END OF VIDEO POPUP ==-->
       <!-- == END OF VIDEO POPUP COMPONENT ==-->
       <!-- ____________________________-->
       <!-- Never miss free updates and get new breathtaking components first!-->
