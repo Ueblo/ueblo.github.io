@@ -1315,6 +1315,7 @@ drift.load('ddgy3r4ggzda');
 		amplitude.getInstance().logEvent(eventName);
 	}
 	$(function(){
+		logEvent("document.ready");
 		$("body").on("click","[data-event]",function(){
 			var eventName = $(this).attr("data-event");
 			// alert(eventName);
