@@ -1106,6 +1106,62 @@ window.addEventListener('DOMContentLoaded', function (){
 	}());
 	// ===== END OF: subscribe form
 
+	// start of app sign up form
+	var signupForm = (function(){
+		var DOM = {
+			$form: $('.js-signup-form')
+		};
+		var bind = function () {
+			DOM.$form.on('submit', function(event) {
+				event.preventDefault();
+
+				register($(this));
+			});
+		};
+		function register($form) {
+			var $submitButton = $form.find($('.js-signup-submit-button'));
+			var submitButtonValue = $submitButton.val();
+			$submitButton.val(submitButtonValue + '...');
+
+			var formData = {};
+			var unindexed_array = $form.serializeArray();		
+			$.map(unindexed_array, function(n, i){
+				formData[n['name']] = n['value'];
+			});
+
+			// get the store URL and remove any http or www
+			var tmp = document.createElement ('a');
+
+
+			// give the store url https if it doesnt have a protocol
+			if(formData.storeUrl.indexOf("https:") == -1 && formData.storeUrl.indexOf("http:") == -1){
+				tmp.href = "https://"+formData.storeUrl;
+			}
+			else{
+				tmp.href = formData.storeUrl;
+			}
+			
+			var storeUrl = tmp.hostname; // www.website.com
+
+			storeUrl.replace(/^www\./,''); // removes the leading www
+
+			if(!!storeUrl){ // we have a store URL. let's go.
+				// alert(storeUrl)
+				var win = window.open("https://app.ueblo.com/shopify?shop="+storeUrl, '_blank');
+				win.focus();
+				  
+			}
+			else{
+				alert("Please check store URL and try again")
+			}
+		}
+
+		return{
+			bind: bind
+		}
+	}());
+	// end of app sign up form
+
 
 	// START OF: lightbox init =====
 	var lightboxPlugin = (function(){
@@ -1196,6 +1252,7 @@ window.addEventListener('DOMContentLoaded', function (){
 	}
 
 	subscribeForm.bind();
+	signupForm.bind();
 	lightboxPlugin.init();
 	maps.init(document.querySelectorAll('.js-map'));
 });
